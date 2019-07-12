@@ -1,0 +1,43 @@
+html {
+  height: 100%;
+}
+
+body {
+  background-color: black;
+  min-height: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+}
+#root {
+  display: flex;
+}
+.piano-key {
+  background-color: aliceblue;
+  width: 30px;
+  border: 1px solid white;
+  border-radius: 5px;
+  margin: 5px;
+  padding: 10px;
+  padding-top:200px;
+  text-align: center;
+  font-weight: bold;
+}
+.piano-key span{
+  display: block;
+  color: #777;
+  font-weight: normal;
+  font-style: italic;
+  font-size: 0.7rem;
+}
+.piano-key:hover {
+  cursor: pointer;
+}
+.tupped {
+  background: linear-gradient(white, aqua);
+  border: 1px solid #ddd;
+}
