@@ -5,36 +5,27 @@ class PianoKey {
         this.keyb = keyb;
     }
 
-    onClick(event){
-        const audio = document.getElementById('audio' + this.character);
-        const pianokey = document.getElementById(this.character);
-        pianokey.className = 'piano-key tupped';
-                
-        setTimeout(() => {
-            pianokey.className = 'piano-key';
-        }, 500);
-
-        audio.play();
-    }
-
     createKey(text = '-') {
         const pianokey = document.createElement('div');
-        const pkSpan = document.createElement('span');
-        const pkAudio = document.createElement('audio');
-
+        const pianokeySpan = document.createElement('span');
+        
         pianokey.className = 'piano-key';
         pianokey.id = this.character;
+        pianokey.setAttribute('data-key', this.keycode);
         pianokey.addEventListener("click", this.onClick.bind(this));
         pianokey.innerText = this.character;
 
-        pkSpan.innerText = this.keyb;
-        pkAudio.id = 'audio' + this.character;
-        pkAudio.setAttribute('data-key', this.keycode);
-        pkAudio.src = `./sounds/middle_${this.character}.mp3`;
+        pianokeySpan.innerText = this.keyb;
 
         document.getElementById('root').append(pianokey);
-        pianokey.append(pkSpan);
-        pianokey.append(pkAudio);
+        pianokey.append(pianokeySpan);
+    }
+
+    onClick(event){
+        const pianokey = document.getElementById(this.character);
+        pianokey.className = 'piano-key tupped';
+
+        onPlay(this.character);
     }
 }
 const keysArrey = [
@@ -49,27 +40,29 @@ const keysArrey = [
 ]
 function addKeys() {
     keysArrey.forEach( 
-    (item) => new PianoKey(item.letter, item.keycode, item.keyb).createKey()
-);
+        (item) => new PianoKey(item.letter, item.keycode, item.keyb).createKey()
+    );
 }
 
 addKeys();
 
-window.addEventListener('keydown', function(event) {
-    this.console.log(event.keyCode);
-    const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`);
-    const key = document.querySelector(`.key[data-key="${event.keyCode}"]`);
-    
-    const keyCodeId = keysArrey.filter((x) => x.keycode == event.keyCode);
-    console.log(keyCodeId);
-    console.log(keyCodeId[0].letter);
+function onPlay(note) {
+    const pianokey = document.getElementById(
+        keysArrey.filter(item => item.letter === note)[0].letter
+    );
 
-    const pianokey = document.getElementById(keyCodeId[0].letter);
-    
-    pianokey.className = 'piano-key tupped';
     setTimeout(() => {
         pianokey.className = 'piano-key';
     }, 500);
+
+    const sound = new Audio(`./sounds/${note}.mp3`);
+    sound.play();
+}
+
+window.addEventListener('keydown', function(event) {
+    const keyCodeId = keysArrey.filter((x) => x.keycode == event.keyCode);
+    const pianokey = document.getElementById(keyCodeId[0].letter);
     
-    audio.play();
+    pianokey.className = 'piano-key tupped';
+    onPlay(keyCodeId[0].letter);
 })
